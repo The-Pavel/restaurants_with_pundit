@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Restaurants</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @restaurants.each do |restaurant| %>
+      <tr>
+        <td><%= restaurant.name %></td>
+        <td><%= restaurant.user.email %></td>
+        <td><%= link_to 'Show', restaurant %></td>
+        <%# we can do conditional rendering on the view layer %>
+        <%# by checking if policy(instance or class).action? is true or false  %>
+        <% if policy(restaurant).edit? %>
+          <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
+        <% end %>
+        <% if policy(restaurant).destroy? %>
+          <td><%= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%# in the case of creating a new Restaurant, we do not have an instance, so we check policy scope of the Restaurant class  %>
+<% if policy(Restaurant).create? %>
+  <%= link_to 'New Restaurant', new_restaurant_path %>
+<% end %>
